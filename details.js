@@ -1,16 +1,24 @@
-let cadenaParametrosUrl = location.search;
-let parametros = new URLSearchParams(cadenaParametrosUrl);
-let id = parametros.get("id");
+const URI = 'https://amazing-events.herokuapp.com/api/events'
 
 let contenedor = document.getElementById("contenedor");
 
-let eventosFiltrados = (data.events).filter((evento) => {
-  return evento;
-});
+function traerDatos(url) {
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        let cadenaParametrosUrl = location.search;
+        let parametros = new URLSearchParams(cadenaParametrosUrl);
+        let id = parametros.get("id");
+        let eventosFiltrados = (data.events).filter((evento) => {
+            return evento;
+          });
+          
+          let eventoEncontrado = eventosFiltrados.find((evento) => evento._id == id);
 
-let eventoEncontrado = eventosFiltrados.find((evento) => evento._id == id);
+          pintarEvento(eventoEncontrado);
+    })
+}
 
-pintarEvento(eventoEncontrado);
 
 function pintarEvento(evento) {
   contenedor.innerHTML = "";
@@ -35,3 +43,5 @@ function pintarEvento(evento) {
 
   contenedor.appendChild(div);
 }
+
+traerDatos(URI)

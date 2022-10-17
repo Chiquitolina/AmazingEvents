@@ -19,7 +19,7 @@ function traerDatos(url) {
             eventos = data.events.filter((evento) => evento.date < data.currentDate)
         }
         desplegarCards(eventos, contenedorDatos)
-        let categoriasFiltradas = filtrarCategorias();
+        let categoriasFiltradas = filtrarCategorias(eventos);
         desplegarCategorias(categoriasFiltradas, contenedorCategorias)
 buscador.addEventListener("keyup", ()=> {
     let eventsFiltrados1 = filtrarporTexto(eventos)
@@ -37,11 +37,11 @@ contenedorCategorias.addEventListener('change', () => {
 }
 
 
-function filtrarCategorias() {
+function filtrarCategorias(eventos) {
 
     let arrayCategorias = []
 
-    data.events.forEach(evento => {
+    eventos.forEach(evento => {
     if (!arrayCategorias.includes(evento.category)) {
         arrayCategorias.push(evento.category)
     }
