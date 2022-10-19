@@ -18,6 +18,7 @@ function traerDatos(url) {
         } else if (document.title == "Past Events") {
             eventos = data.events.filter((evento) => evento.date < data.currentDate)
         }
+        renderizarImagenesCarrousel(eventos)
         desplegarCards(eventos, contenedorDatos)
         let categoriasFiltradas = filtrarCategorias(eventos);
         desplegarCategorias(categoriasFiltradas, contenedorCategorias)
@@ -66,17 +67,20 @@ function desplegarCategorias(cat, contenedorCategorias) {
 
 function desplegarCards(eventos, contenedorDatos) {
 
+    if (eventos.length == 0) {
+        contenedorDatos.innerHTML = `<h5> No se han encontrado elementos coicindentes con la búsqueda.</h5>`
+    } else {
     contenedorDatos.innerHTML = "";
 
     eventos.forEach((evento) => {
 
         let card = document.createElement('div')
-    card.className = "col-12 col-md-3"
+    card.className = "col-12 col-md-3 mt-4"
     card.innerHTML=`<div class="card h-100">
     <img src="${evento.image}" class="card-img-top h-50 rounded" alt="...">
     <div class="card-body">
         <h5 class="card-title">${evento.name}</h5>
-        <p class="card-text">${evento.description}</p>
+        <p class="card-text" style="font-size: 0.8rem">${evento.description}</p>
             <div class="d-flex justify-content-between">
                 <span>Price: ${evento.price} </span><a href="./details.html?id=${evento._id}" class="btn btn-primary">Details</a>
             </div>
@@ -84,7 +88,7 @@ function desplegarCards(eventos, contenedorDatos) {
 </div>`
     contenedorDatos.appendChild(card)
 
-    })
+    })}
 
 }
 
@@ -112,6 +116,22 @@ function filtrarporCategoria(eventos) {
     let eventsFiltrados = eventos.filter(evento => valoresChecks.includes(evento.category))
 
     return eventsFiltrados;
+}
+
+function renderizarImagenesCarrousel(eventos) {
+    for (let i = 0; i < eventos.length; i++) {
+
+        let imgcarrousel = document.createElement('div')
+        if (i == 0) {
+        imgcarrousel.className = "carousel-item active text-center text-black"
+        } else {
+        imgcarrousel.className = "carousel-item text-center text-black"
+        }
+        imgcarrousel.innerHTML = `<p style="background-black: red">"${document.title}"</p><img src="${eventos[i].image}" class="imgs altcarr d-block w-100 altcarr" alt="...">`
+    
+    
+        contenedorCarrousel.appendChild(imgcarrousel)
+    }
 }
 
 traerDatos(URI)

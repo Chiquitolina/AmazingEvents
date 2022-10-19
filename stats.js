@@ -1,10 +1,12 @@
 const URI = 'https://amazing-events.herokuapp.com/api/events'
+let contenedorCarrousel = document.getElementById('contenedor-carr')
 
 function traerDatos(url) {
     fetch(url)
     .then(response => response.json())
     .then(data => {
         let eventos = data.events;
+        renderizarImagenesCarrousel(eventos)
         let eventosUP = eventos.filter(evento => evento.date > data.currentDate)
         let eventosPAST = eventos.filter(evento => evento.date < data.currentDate)
         let eventosnoUP = eventos.filter(evento => evento.date < data.currentDate)
@@ -42,16 +44,16 @@ function renderizarDatosEnTabla(arraycategoriascalculadasup, arraycategoriascalc
         let trCategoria = document.createElement('tr')
         trCategoria.innerHTML = `
         <td>${categoria.name}</td>
-        <td>${categoria.revenues}</td>
-        <td>${categoria.porcentaje}</td>`
+        <td>${categoria.revenues.toLocaleString()}$</td>
+        <td>${categoria.porcentaje.toFixed(2)}%</td>`
         contenedorUP.appendChild(trCategoria)
     })
     arraycategoriascalculadaspast.forEach(categoria => {
         let trCategoria = document.createElement('tr')
         trCategoria.innerHTML = `
         <td>${categoria.name}</td>
-        <td>${categoria.revenues}</td>
-        <td>${categoria.porcentaje}</td>`
+        <td>${categoria.revenues.toLocaleString()}$</td>
+        <td>${categoria.porcentaje.toFixed(2)}%</td>`
         contenedorPAST.appendChild(trCategoria)
     })
     
@@ -87,13 +89,13 @@ function calcularRevenues(arrayeventosporcategoria) {
     arrayeventosporcategoria.forEach(array => {
         let revenuescat = []
         for (let i = 0; i < array.length; i++) {
+            let revenue;
             if (array[i].hasOwnProperty('estimate')) {
-            let revenue = array[i].estimate * array[i].price
-            revenuescat.push(revenue)
+            revenue = array[i].estimate * array[i].price
             } else {
-            let revenue = array[i].assistance * array[i].price
-            revenuescat.push(revenue)
+            revenue = array[i].assistance * array[i].price
             }
+            revenuescat.push(revenue)
         }
         arrayrevenues.push(revenuescat.reduce((i, e) => i + e))
     })
@@ -151,6 +153,22 @@ function calculoporcentajeAsistencia(evento) {
         resultado = ((evento.estimate * 100) / evento.capacity)
         }
     return resultado;
+}
+
+function renderizarImagenesCarrousel(eventos) {
+    for (let i = 0; i < eventos.length; i++) {
+
+        let imgcarrousel = document.createElement('div')
+        if (i == 0) {
+        imgcarrousel.className = "carousel-item active text-center text-black"
+        } else {
+        imgcarrousel.className = "carousel-item text-center text-black"
+        }
+        imgcarrousel.innerHTML = `<p style="background-black: red">"${document.title}"</p><img src="${eventos[i].image}" class="imgs altcarr d-block w-100 altcarr" alt="...">`
+    
+    
+        contenedorCarrousel.appendChild(imgcarrousel)
+    }
 }
 
 traerDatos(URI)

@@ -1,7 +1,5 @@
 const URI = 'https://amazing-events.herokuapp.com/api/events'
 
-let contenedor = document.getElementById("contenedor");
-
 function traerDatos(url) {
     fetch(url)
     .then(response => response.json())
@@ -21,6 +19,7 @@ function traerDatos(url) {
 
 
 function pintarEvento(evento) {
+    let contenedor = document.getElementById("contenedor");
   contenedor.innerHTML = "";
     let div = document.createElement('div')
     div.className="container d-flex justify-content-center align-items-center"
